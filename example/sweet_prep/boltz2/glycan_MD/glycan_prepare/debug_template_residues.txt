@@ -1,0 +1,162 @@
+================================================================================
+Residue index: 71
+Residue: NLN:A:72
+Template: NLN
+
+Atoms:
+    543 N
+    544 CA
+    545 C
+    546 O
+    547 CB
+    548 CG
+    549 ND2
+    550 OD1
+
+Bonds involving this residue:
+  PHE:A:71:C -- NLN:A:72:N
+  NLN:A:72:C -- NLN:A:72:CA
+  NLN:A:72:C -- NLN:A:72:O
+  NLN:A:72:CA -- NLN:A:72:CB
+  NLN:A:72:CA -- NLN:A:72:N
+  NLN:A:72:CB -- NLN:A:72:CG
+  NLN:A:72:CG -- NLN:A:72:ND2
+  NLN:A:72:CG -- NLN:A:72:OD1
+  NLN:A:72:C -- ARG:A:73:N
+  NLN:A:72:ND2 -- 4YB:B:1:C1
+
+================================================================================
+Residue index: 79
+Residue: NLN:A:80
+Template: NLN
+
+Atoms:
+    603 N
+    604 CA
+    605 C
+    606 O
+    607 CB
+    608 CG
+    609 ND2
+    610 OD1
+
+Bonds involving this residue:
+  GLY:A:79:C -- NLN:A:80:N
+  NLN:A:80:C -- NLN:A:80:CA
+  NLN:A:80:C -- NLN:A:80:O
+  NLN:A:80:CA -- NLN:A:80:CB
+  NLN:A:80:CA -- NLN:A:80:N
+  NLN:A:80:CB -- NLN:A:80:CG
+  NLN:A:80:CG -- NLN:A:80:ND2
+  NLN:A:80:CG -- NLN:A:80:OD1
+  NLN:A:80:C -- PHE:A:81:N
+  NLN:A:80:ND2 -- 4YB:C:1:C1
+
+================================================================================
+Residue index: 156
+Residue: NLN:A:157
+Template: NLN
+
+Atoms:
+   1216 N
+   1217 CA
+   1218 C
+   1219 O
+   1220 CB
+   1221 CG
+   1222 ND2
+   1223 OD1
+
+Bonds involving this residue:
+  GLU:A:156:C -- NLN:A:157:N
+  NLN:A:157:C -- NLN:A:157:CA
+  NLN:A:157:C -- NLN:A:157:O
+  NLN:A:157:CA -- NLN:A:157:CB
+  NLN:A:157:CA -- NLN:A:157:N
+  NLN:A:157:CB -- NLN:A:157:CG
+  NLN:A:157:CG -- NLN:A:157:ND2
+  NLN:A:157:CG -- NLN:A:157:OD1
+  NLN:A:157:C -- ILE:A:158:N
+  NLN:A:157:ND2 -- 4YB:D:1:C1
+
+================================================================================
+Residue index: 279
+Residue: NLN:A:280
+Template: NLN
+
+Atoms:
+   2226 N
+   2227 CA
+   2228 C
+   2229 O
+   2230 CB
+   2231 CG
+   2232 ND2
+   2233 OD1
+
+Bonds involving this residue:
+  CYS:A:279:C -- NLN:A:280:N
+  NLN:A:280:C -- NLN:A:280:CA
+  NLN:A:280:C -- NLN:A:280:O
+  NLN:A:280:CA -- NLN:A:280:CB
+  NLN:A:280:CA -- NLN:A:280:N
+  NLN:A:280:CB -- NLN:A:280:CG
+  NLN:A:280:CG -- NLN:A:280:ND2
+  NLN:A:280:CG -- NLN:A:280:OD1
+  NLN:A:280:C -- SER:A:281:N
+  NLN:A:280:ND2 -- 4YB:E:1:C1
+
+================================================================================
+Residue index: 325
+Residue: NLN:A:326
+Template: NLN
+
+Atoms:
+   2582 N
+   2583 CA
+   2584 C
+   2585 O
+   2586 CB
+   2587 CG
+   2588 ND2
+   2589 OD1
+
+Bonds involving this residue:
+  SER:A:325:C -- NLN:A:326:N
+  NLN:A:326:C -- NLN:A:326:CA
+  NLN:A:326:C -- NLN:A:326:O
+  NLN:A:326:CA -- NLN:A:326:CB
+  NLN:A:326:CA -- NLN:A:326:N
+  NLN:A:326:CB -- NLN:A:326:CG
+  NLN:A:326:CG -- NLN:A:326:ND2
+  NLN:A:326:CG -- NLN:A:326:OD1
+  NLN:A:326:C -- SER:A:327:N
+  NLN:A:326:ND2 -- 4YB:F:1:C1
+
+================================================================================
+Residue index: 360
+Residue: NLN:A:361
+Template: NLN
+
+Atoms:
+   2859 N
+   2860 CA
+   2861 C
+   2862 O
+   2863 CB
+   2864 CG
+   2865 ND2
+   2866 OD1
+
+Bonds involving this residue:
+  LEU:A:360:C -- NLN:A:361:N
+  NLN:A:361:C -- NLN:A:361:CA
+  NLN:A:361:C -- NLN:A:361:O
+  NLN:A:361:CA -- NLN:A:361:CB
+  NLN:A:361:CA -- NLN:A:361:N
+  NLN:A:361:CB -- NLN:A:361:CG
+  NLN:A:361:CG -- NLN:A:361:ND2
+  NLN:A:361:CG -- NLN:A:361:OD1
+  NLN:A:361:C -- GLY:A:362:N
+  NLN:A:361:ND2 -- 4YB:G:1:C1
+
