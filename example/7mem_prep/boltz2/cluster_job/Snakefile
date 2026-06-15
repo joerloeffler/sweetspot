@@ -1,0 +1,82 @@
+import os
+
+JOBDIR = os.path.dirname(workflow.snakefile)
+configfile: os.path.join(JOBDIR, "config.yaml")
+
+FAA = os.path.join(JOBDIR, "msa_queries.fasta")
+YAML = os.path.join(JOBDIR, "input.yaml")
+MSA_DIR = os.path.join(JOBDIR, "boltz2output/msas")
+OUT_DIR = os.path.join(JOBDIR, "boltz2output/predictions")
+
+COLABFOLD_BIN = config["colabfold_bin"]
+MMSEQS_BIN = config["mmseqs_bin"]
+DB1 = config["db1"]
+DB_DIR = config["db_dir"]
+THREADS = int(config["msa_threads"])
+USE_ENV = str(config["use_env"])
+TMP_ROOT = config["tmp_root"]
+DIFFUSION_SAMPLES = int(config["diffusion_samples"])
+
+MSA_OUTPUTS = [os.path.join(JOBDIR, path) for path in config["msa_outputs"]]
+MSA_MOVES = "\n        ".join(
+    f'test -s "$RUN_DIR/{i}.a3m"\n        mv -f "$RUN_DIR/{i}.a3m" "{path}"'
+    for i, path in enumerate(MSA_OUTPUTS)
+)
+
+rule all:
+    input:
+        MSA_OUTPUTS,
+        os.path.join(OUT_DIR, "DONE.txt")
+
+rule msa:
+    output:
+        MSA_OUTPUTS
+    shell:
+        r'''
+        set -euo pipefail
+        mkdir -p "{MSA_DIR}" "{TMP_ROOT}"
+
+        RUN_DIR="$(mktemp -d "{TMP_ROOT}/run_XXXXXX")"
+        trap 'rm -rf "$RUN_DIR"' EXIT
+
+        "{COLABFOLD_BIN}" \
+          --threads {THREADS} \
+          --mmseqs "{MMSEQS_BIN}" \
+          --use-env {USE_ENV} \
+          "{FAA}" \
+          --db1 "{DB1}" \
+          "{DB_DIR}" \
+          "$RUN_DIR"
+
+        {MSA_MOVES}
+        '''
+
+rule predict:
+    input:
+        MSA_OUTPUTS,
+        YAML
+    output:
+        os.path.join(OUT_DIR, "DONE.txt")
+    shell:
+        r'''
+        set -euo pipefail
+        mkdir -p "{OUT_DIR}"
+
+        "{config[boltz_bin]}" predict "{YAML}" \
+          --out_dir "{OUT_DIR}" \
+          --diffusion_samples {DIFFUSION_SAMPLES}
+
+        copied_any=0
+        while IFS= read -r -d '' cif; do
+          bn="$(basename "$cif")"
+          cp -f "$cif" "{JOBDIR}/$bn"
+          copied_any=1
+        done < <(find "{OUT_DIR}" -type f \( -name '*.cif' -o -name '*.mmcif' \) -print0)
+
+        if [ "$copied_any" -eq 0 ]; then
+          echo "ERROR: no CIF/mmCIF files found under {OUT_DIR}" >&2
+          exit 1
+        fi
+
+        echo "ok" > "{output}"
+        '''
