@@ -15,6 +15,7 @@ Usage:
   python sweetspot.py -f protein.cif
   python sweetspot.py -f protein.pdb -m all
   python sweetspot.py -f protein.pdb -m all -t branched -g NAG-NAG-MAN-MAN
+  python sweetspot.py -f protein.pdb -m boltz2 -g man9
   python sweetspot.py -f protein.pdb -m rfaa --rfaa-glycan-sdf glycan.sdf
 """
 
@@ -37,6 +38,68 @@ except ImportError:
 
 
 DEFAULT_GLYCAN = "NAG-NAG-MAN"
+
+# Man9GlcNAc2 high-mannose preset.
+# Residue order / IDs inside each ligand chain:
+#   1 NAG  ASN-linked reducing GlcNAc
+#   2 NAG  second GlcNAc
+#   3 MAN  core beta-Man
+#   4 MAN  alpha1-3 arm Man
+#   5 MAN  alpha1-6 arm Man
+#   6 MAN  D1 arm Man
+#   7 MAN  terminal D1 Man
+#   8 MAN  D2 arm Man
+#   9 MAN  terminal D2 Man
+#  10 MAN  D3 arm Man
+#  11 MAN  terminal D3 Man
+GLYCAN_PRESETS = {
+    "man9": [
+        "NAG", "NAG",
+        "MAN",
+        "MAN", "MAN",
+        "MAN", "MAN",
+        "MAN", "MAN",
+        "MAN", "MAN",
+    ],
+    "man9glcnac2": [
+        "NAG", "NAG",
+        "MAN",
+        "MAN", "MAN",
+        "MAN", "MAN",
+        "MAN", "MAN",
+        "MAN", "MAN",
+    ],
+}
+
+# Explicit covalent topology for Man9GlcNAc2. Atom naming assumes CCD-style
+# sugar atoms where the child anomeric carbon is C1.
+# Linkage labels are comments only; atom pairs define the generated constraints.
+GLYCAN_PRESET_BONDS = {
+    "man9": [
+        (0, 1, "O4", "C1"),   # GlcNAc beta1-4 GlcNAc
+        (1, 2, "O4", "C1"),   # GlcNAc beta1-4 Man core
+        (2, 3, "O3", "C1"),   # Man alpha1-3 arm
+        (2, 4, "O6", "C1"),   # Man alpha1-6 arm
+        (3, 5, "O2", "C1"),   # D1 extension
+        (5, 6, "O2", "C1"),   # D1 terminal
+        (4, 7, "O3", "C1"),   # D2 extension
+        (7, 8, "O2", "C1"),   # D2 terminal
+        (4, 9, "O6", "C1"),   # D3 extension
+        (9, 10, "O2", "C1"),  # D3 terminal
+    ],
+    "man9glcnac2": [
+        (0, 1, "O4", "C1"),
+        (1, 2, "O4", "C1"),
+        (2, 3, "O3", "C1"),
+        (2, 4, "O6", "C1"),
+        (3, 5, "O2", "C1"),
+        (5, 6, "O2", "C1"),
+        (4, 7, "O3", "C1"),
+        (7, 8, "O2", "C1"),
+        (4, 9, "O6", "C1"),
+        (9, 10, "O2", "C1"),
+    ],
+}
 
 # Synced from /Users/joe/Software/mojoeMD/mojoeMD.py glycoprotein helpers.
 PDB_TO_GLYCAM_SUFFIXES = {
@@ -258,7 +321,21 @@ def find_nglyc_sites(chains):
     return sites
 
 
+def glycan_preset_name(glycan: str) -> str | None:
+    key = glycan.strip().lower().replace("-", "").replace("_", "")
+    aliases = {
+        "man9": "man9",
+        "man9glcnac2": "man9",
+        "highmannose9": "man9",
+        "highman9": "man9",
+    }
+    return aliases.get(key)
+
+
 def parse_glycan(glycan: str) -> List[str]:
+    preset = glycan_preset_name(glycan)
+    if preset:
+        return list(GLYCAN_PRESETS[preset])
     return [x.strip().upper() for x in re.split(r"[-,>]+", glycan) if x.strip()]
 
 
@@ -310,6 +387,19 @@ def glycan_edges(glycan: List[str], tree: str):
     return edges
 
 
+def glycan_bonds(glycan: List[str], tree: str, preset_name: str | None = None):
+    if preset_name and preset_name in GLYCAN_PRESET_BONDS:
+        return list(GLYCAN_PRESET_BONDS[preset_name])
+
+    bonds = []
+    for parent, child in glycan_edges(glycan, tree):
+        parent_res = glycan[parent]
+        child_res = glycan[child]
+        atom1, atom2 = glycan_link_atoms(parent_res, child_res)
+        bonds.append((parent, child, atom1, atom2))
+    return bonds
+
+
 def atom_ref(chain: str, residue: int, atom: str, role: str, resname: str | None = None) -> dict:
     ref = {
         "chain": chain,
@@ -322,7 +412,7 @@ def atom_ref(chain: str, residue: int, atom: str, role: str, resname: str | None
     return ref
 
 
-def build_linked_glycan_manifest(sites, glycan, tree, name: str, backend: str) -> dict:
+def build_linked_glycan_manifest(sites, glycan, tree, name: str, backend: str, preset_name: str | None = None) -> dict:
     bonds = []
     c1_linked = set()
     protein_atom, glycan_atom = protein_glycan_link_atoms(glycan)
@@ -337,10 +427,9 @@ def build_linked_glycan_manifest(sites, glycan, tree, name: str, backend: str) -
         if glycan_atom == glycan_anomeric_atom(glycan[0]):
             c1_linked.add((gly_id, 1, glycan[0]))
 
-        for parent, child in glycan_edges(glycan, tree):
+        for parent, child, atom1, atom2 in glycan_bonds(glycan, tree, preset_name):
             parent_res = glycan[parent]
             child_res = glycan[child]
-            atom1, atom2 = glycan_link_atoms(parent_res, child_res)
             bonds.append({
                 "atom1": atom_ref(gly_id, parent + 1, atom1, "glycan", parent_res),
                 "atom2": atom_ref(gly_id, child + 1, atom2, "glycan", child_res),
@@ -368,6 +457,7 @@ def build_linked_glycan_manifest(sites, glycan, tree, name: str, backend: str) -
         "backend": backend,
         "glycan": "-".join(glycan),
         "tree": tree,
+        "preset": preset_name,
         "notes": [
             "Prediction inputs use CCD monomers plus covalent constraints.",
             "Many predictors emit standalone CCD sugar atom sets; this manifest condenses linked sugars for GLYCAM/OpenMM handoff.",
@@ -378,8 +468,8 @@ def build_linked_glycan_manifest(sites, glycan, tree, name: str, backend: str) -
     }
 
 
-def write_linked_glycan_manifest(sites, glycan, tree, outdir: Path, name: str, backend: str) -> Path:
-    manifest = build_linked_glycan_manifest(sites, glycan, tree, name, backend)
+def write_linked_glycan_manifest(sites, glycan, tree, outdir: Path, name: str, backend: str, preset_name: str | None = None) -> Path:
+    manifest = build_linked_glycan_manifest(sites, glycan, tree, name, backend, preset_name)
     path = outdir / GLYCAN_LINK_MANIFEST_NAME
     path.write_text(json.dumps(manifest, indent=2) + "\n")
     return path
@@ -593,7 +683,7 @@ def write_esm(chains, sites, outdir: Path):
     return [fasta, note]
 
 
-def write_af3(chains, sites, glycan, tree, outdir: Path, name: str):
+def write_af3(chains, sites, glycan, tree, outdir: Path, name: str, preset_name: str | None = None):
     outdir.mkdir(parents=True, exist_ok=True)
     sequences = []
     bonds = []
@@ -621,10 +711,9 @@ def write_af3(chains, sites, glycan, tree, outdir: Path, name: str):
             [gly_id, 1, glycan_atom],
         ])
 
-        for parent, child in glycan_edges(glycan, tree):
+        for parent, child, atom1, atom2 in glycan_bonds(glycan, tree, preset_name):
             a = glycan[parent]
             b = glycan[child]
-            atom1, atom2 = glycan_link_atoms(a, b)
 
             bonds.append([
                 [gly_id, parent + 1, atom1],
@@ -643,7 +732,7 @@ def write_af3(chains, sites, glycan, tree, outdir: Path, name: str):
     path = outdir / f"{name}_all_nglyc_sites_af3.json"
     path.write_text(json.dumps(payload, indent=2))
 
-    manifest = write_linked_glycan_manifest(sites, glycan, tree, outdir, name, "af3")
+    manifest = write_linked_glycan_manifest(sites, glycan, tree, outdir, name, "af3", preset_name)
     sanitizer = write_glycan_sanitizer(outdir)
     readme = outdir / "README_glycan_handoff.txt"
     readme.write_text(
@@ -661,7 +750,7 @@ def write_af3(chains, sites, glycan, tree, outdir: Path, name: str):
     return [path, manifest, sanitizer, readme]
 
 
-def write_boltz2(chains, sites, glycan, tree, outdir: Path, name: str):
+def write_boltz2(chains, sites, glycan, tree, outdir: Path, name: str, preset_name: str | None = None):
     if yaml is None:
         raise RuntimeError("PyYAML missing. Install with: pip install pyyaml")
 
@@ -702,10 +791,9 @@ def write_boltz2(chains, sites, glycan, tree, outdir: Path, name: str):
             "glycan_id": gly_id,
         })
 
-        for parent, child in glycan_edges(glycan, tree):
+        for parent, child, atom1, atom2 in glycan_bonds(glycan, tree, preset_name):
             a = glycan[parent]
             b = glycan[child]
-            atom1, atom2 = glycan_link_atoms(a, b)
 
             constraints.append({
                 "bond": {
@@ -722,6 +810,7 @@ def write_boltz2(chains, sites, glycan, tree, outdir: Path, name: str):
             "name": f"{name}_all_nglyc_sites",
             "glycan": "-".join(glycan),
             "tree": tree,
+            "preset": preset_name,
             "sites": site_metadata,
             "note": "Check CCD atom names/linkages before production.",
         },
@@ -731,7 +820,7 @@ def write_boltz2(chains, sites, glycan, tree, outdir: Path, name: str):
     with path.open("w") as f:
         yaml.safe_dump(payload, f, sort_keys=False)
 
-    manifest = write_linked_glycan_manifest(sites, glycan, tree, outdir, name, "boltz2")
+    manifest = write_linked_glycan_manifest(sites, glycan, tree, outdir, name, "boltz2", preset_name)
     sanitizer = write_glycan_sanitizer(outdir)
     readme = outdir / "README_glycan_handoff.txt"
     readme.write_text(
@@ -760,6 +849,7 @@ def write_rfaa(
     glycan_sdf: Path,
     link_atom_index: int,
     link_chirality: str,
+    preset_name: str | None = None,
 ):
     if yaml is None:
         raise RuntimeError("PyYAML missing. Install with: pip install pyyaml")
@@ -814,6 +904,7 @@ def write_rfaa(
         "metadata": {
             "glycan": "-".join(glycan),
             "tree": tree,
+            "preset": preset_name,
             "sites": site_metadata,
             "rfaa_link_atom_index": link_atom_index,
             "rfaa_link_chirality": link_chirality,
@@ -871,6 +962,7 @@ def main():
 
     infile = Path(args.file)
     model = normalize_model(args.model)
+    preset_name = glycan_preset_name(args.glycans)
     glycan = parse_glycan(args.glycans)
     try:
         validate_glycan(glycan)
@@ -901,10 +993,10 @@ def main():
         written.extend(write_esm(chains, sites, root / "esm"))
 
     if model in {"af3", "all"}:
-        written.extend(write_af3(chains, sites, glycan, args.tree, root / "af3", infile.stem))
+        written.extend(write_af3(chains, sites, glycan, args.tree, root / "af3", infile.stem, preset_name))
 
     if model in {"boltz2", "all"}:
-        written.extend(write_boltz2(chains, sites, glycan, args.tree, root / "boltz2", infile.stem))
+        written.extend(write_boltz2(chains, sites, glycan, args.tree, root / "boltz2", infile.stem, preset_name))
 
     if model in {"rfaa", "all"}:
         written.extend(
@@ -918,6 +1010,7 @@ def main():
                 Path(args.rfaa_glycan_sdf),
                 args.rfaa_link_atom_index,
                 args.rfaa_link_chirality,
+                preset_name,
             )
         )
 
@@ -932,6 +1025,8 @@ def main():
 
     print("\nNotes:")
     print("  ESM is protein-only.")
+    if preset_name:
+        print(f"  Glycan preset used: {preset_name} ({'-'.join(glycan)}).")
     print("  AF3/Boltz2 glycan atom names should be checked against CCD definitions.")
     print("  RFAA covalent glycans need one merged SDF; the CCD glycan string is only metadata there.")
 

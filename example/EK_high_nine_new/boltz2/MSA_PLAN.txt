@@ -1,0 +1,6 @@
+MSA plan
+========
+
+Detected monomer with 1 chain(s) and 1 unique protein sequence(s).
+
+boltz2output/msas/A.a3m: chains A
