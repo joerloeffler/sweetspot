@@ -2,7 +2,7 @@
 """
 sweetspot.py
 
-Detect N-glycosylation sequons in PDB/mmCIF and write inputs for:
+Detect N-glycosylation sequons in PDB/mmCIF/FASTA and write inputs for:
   - RFAA / RF3-style RoseTTAFold-All-Atom
   - AlphaFold3
   - Boltz2
@@ -16,6 +16,8 @@ Usage:
   python sweetspot.py -f protein.pdb -m all
   python sweetspot.py -f protein.pdb -m all -t branched -g NAG-NAG-MAN-MAN
   python sweetspot.py -f protein.pdb -m boltz2 -g man9
+  python sweetspot.py -f protein.fasta -m boltz2 --multimer 2 -g man5
+  python sweetspot.py -f complex.fasta -m boltz2 --complex
   python sweetspot.py -f protein.pdb -m rfaa --rfaa-glycan-sdf glycan.sdf
 """
 
@@ -39,13 +41,17 @@ except ImportError:
 
 DEFAULT_GLYCAN = "NAG-NAG-MAN"
 
-# Man9GlcNAc2 high-mannose preset.
+# Man5/Man9 GlcNAc2 high-mannose presets.
 # Residue order / IDs inside each ligand chain:
 #   1 NAG  ASN-linked reducing GlcNAc
 #   2 NAG  second GlcNAc
 #   3 MAN  core beta-Man
 #   4 MAN  alpha1-3 arm Man
 #   5 MAN  alpha1-6 arm Man
+# Man5:
+#   6 MAN  alpha1-2 on alpha1-3 arm
+#   7 MAN  alpha1-2 on alpha1-6 arm
+# Man9:
 #   6 MAN  D1 arm Man
 #   7 MAN  terminal D1 Man
 #   8 MAN  D2 arm Man
@@ -53,6 +59,18 @@ DEFAULT_GLYCAN = "NAG-NAG-MAN"
 #  10 MAN  D3 arm Man
 #  11 MAN  terminal D3 Man
 GLYCAN_PRESETS = {
+    "man5": [
+        "NAG", "NAG",
+        "MAN",
+        "MAN", "MAN",
+        "MAN", "MAN",
+    ],
+    "man5glcnac2": [
+        "NAG", "NAG",
+        "MAN",
+        "MAN", "MAN",
+        "MAN", "MAN",
+    ],
     "man9": [
         "NAG", "NAG",
         "MAN",
@@ -71,10 +89,26 @@ GLYCAN_PRESETS = {
     ],
 }
 
-# Explicit covalent topology for Man9GlcNAc2. Atom naming assumes CCD-style
+# Explicit covalent topology for high-mannose presets. Atom naming assumes CCD-style
 # sugar atoms where the child anomeric carbon is C1.
 # Linkage labels are comments only; atom pairs define the generated constraints.
 GLYCAN_PRESET_BONDS = {
+    "man5": [
+        (0, 1, "O4", "C1"),   # GlcNAc beta1-4 GlcNAc
+        (1, 2, "O4", "C1"),   # GlcNAc beta1-4 Man core
+        (2, 3, "O3", "C1"),   # Man alpha1-3 arm
+        (2, 4, "O6", "C1"),   # Man alpha1-6 arm
+        (3, 5, "O2", "C1"),   # terminal alpha1-2 on alpha1-3 arm
+        (4, 6, "O2", "C1"),   # terminal alpha1-2 on alpha1-6 arm
+    ],
+    "man5glcnac2": [
+        (0, 1, "O4", "C1"),
+        (1, 2, "O4", "C1"),
+        (2, 3, "O3", "C1"),
+        (2, 4, "O6", "C1"),
+        (3, 5, "O2", "C1"),
+        (4, 6, "O2", "C1"),
+    ],
     "man9": [
         (0, 1, "O4", "C1"),   # GlcNAc beta1-4 GlcNAc
         (1, 2, "O4", "C1"),   # GlcNAc beta1-4 Man core
@@ -189,7 +223,7 @@ def parse_args():
     p = argparse.ArgumentParser(
         description="Detect N-glycosylation sites and generate AF3/Boltz2/RFAA/ESM inputs."
     )
-    p.add_argument("-f", "--file", help="Input PDB/mmCIF file.")
+    p.add_argument("-f", "--file", help="Input PDB/mmCIF or FASTA file.")
     p.add_argument(
         "-m",
         "--model",
@@ -201,7 +235,7 @@ def parse_args():
         "-g",
         "--glycans",
         default=DEFAULT_GLYCAN,
-        help="Glycan string, e.g. NAG-NAG-MAN or NAG-NAG-MAN-MAN.",
+        help="Glycan string or preset, e.g. NAG-NAG-MAN, NAG-NAG-MAN-MAN, man5, or man9.",
     )
     p.add_argument(
         "-t",
@@ -243,6 +277,20 @@ def parse_args():
         action="store_true",
         help="List supported glycan CCD/PDB residue names imported from mojoeMD and exit.",
     )
+    p.add_argument(
+        "--complex",
+        action="store_true",
+        help=(
+            "Treat -f/--file as a multi-record FASTA complex, with one protein "
+            "chain per FASTA record."
+        ),
+    )
+    p.add_argument(
+        "--multimer",
+        type=int,
+        default=None,
+        help="Treat -f/--file as a single-sequence FASTA and create this many identical chains.",
+    )
     return p.parse_args()
 
 
@@ -258,6 +306,82 @@ def parse_structure(path: Path):
     if path.suffix.lower() in {".cif", ".mmcif"}:
         return MMCIFParser(QUIET=True).get_structure(path.stem, str(path))
     return PDBParser(QUIET=True).get_structure(path.stem, str(path))
+
+
+FASTA_SUFFIXES = {".fa", ".faa", ".fas", ".fasta", ".fna"}
+VALID_FASTA_AA = set("ABCDEFGHIKLMNPQRSTVWXYZ")
+
+
+def is_fasta_path(path: Path) -> bool:
+    return path.suffix.lower() in FASTA_SUFFIXES
+
+
+def parse_fasta(path: Path) -> List[Tuple[str, str]]:
+    records = []
+    header = None
+    seq_parts = []
+
+    for raw in path.read_text().splitlines():
+        line = raw.strip()
+        if not line:
+            continue
+        if line.startswith(">"):
+            if header is not None:
+                records.append((header, "".join(seq_parts).upper()))
+            header = line[1:].strip() or f"sequence_{len(records) + 1}"
+            seq_parts = []
+            continue
+        if header is None:
+            raise ValueError("FASTA sequence data appeared before the first header line.")
+        seq_parts.append(re.sub(r"\s+", "", line))
+
+    if header is not None:
+        records.append((header, "".join(seq_parts).upper()))
+
+    if not records:
+        raise ValueError("No FASTA records found.")
+
+    for header, sequence in records:
+        if not sequence:
+            raise ValueError(f"FASTA record {header!r} has no sequence.")
+        invalid = sorted(set(sequence) - VALID_FASTA_AA)
+        if invalid:
+            raise ValueError(
+                f"FASTA record {header!r} contains unsupported residue code(s): {', '.join(invalid)}"
+            )
+
+    return records
+
+
+def chain_id_from_header(header: str, used: set[str], fallback_index: int) -> str:
+    token = header.split()[0] if header.split() else ""
+    if len(token) == 1 and token in CHAIN_ID_POOL and token not in used:
+        return token
+
+    for cid in CHAIN_ID_POOL[fallback_index:] + CHAIN_ID_POOL[:fallback_index]:
+        if cid not in used:
+            return cid
+
+    raise ValueError("Too many chains for available single-character chain IDs.")
+
+
+def fasta_records_to_chains(records: List[Tuple[str, str]], multimer: int | None = None):
+    if multimer is not None:
+        if multimer < 1:
+            raise ValueError("--multimer must be 1 or greater.")
+        if len(records) != 1:
+            raise ValueError("--multimer expects a single-record FASTA input.")
+        _, sequence = records[0]
+        records = [(f"copy_{i + 1}", sequence) for i in range(multimer)]
+
+    chains = {}
+    used = set()
+    for i, (header, sequence) in enumerate(records):
+        cid = chain_id_from_header(header, used, i)
+        used.add(cid)
+        chains[cid] = [(str(pos), aa) for pos, aa in enumerate(sequence, 1)]
+
+    return chains
 
 
 def aa3_to_aa1(resname: str) -> str:
@@ -324,6 +448,10 @@ def find_nglyc_sites(chains):
 def glycan_preset_name(glycan: str) -> str | None:
     key = glycan.strip().lower().replace("-", "").replace("_", "")
     aliases = {
+        "man5": "man5",
+        "man5glcnac2": "man5",
+        "highmannose5": "man5",
+        "highman5": "man5",
         "man9": "man9",
         "man9glcnac2": "man9",
         "highmannose9": "man9",
@@ -968,14 +1096,31 @@ def main():
         validate_glycan(glycan)
         if args.rfaa_link_atom_index < 1:
             raise ValueError("--rfaa-link-atom-index must be 1 or greater.")
+        if args.multimer is not None and args.multimer < 1:
+            raise ValueError("--multimer must be 1 or greater.")
     except ValueError as exc:
         raise SystemExit(f"error: {exc}") from exc
 
     root = Path(args.outdir) if args.outdir else Path(f"{infile.stem}_glyco_inputs")
     root.mkdir(parents=True, exist_ok=True)
 
-    structure = parse_structure(infile)
-    chains = extract_chains(structure)
+    fasta_input = args.complex or args.multimer is not None or is_fasta_path(infile)
+    try:
+        if fasta_input:
+            records = parse_fasta(infile)
+            if args.complex and args.multimer is not None:
+                raise ValueError("--complex and --multimer are alternative FASTA modes; use one at a time.")
+            if args.complex and len(records) < 2:
+                raise ValueError("--complex expects a FASTA file with at least two records.")
+            if len(records) > 1 and not args.complex and args.multimer is None:
+                raise ValueError("multi-record FASTA input requires --complex.")
+            chains = fasta_records_to_chains(records, args.multimer)
+        else:
+            structure = parse_structure(infile)
+            chains = extract_chains(structure)
+    except ValueError as exc:
+        raise SystemExit(f"error: {exc}") from exc
+
     sites = find_nglyc_sites(chains)
 
     if not chains:

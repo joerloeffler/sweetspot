@@ -1,0 +1,146 @@
+2026-07-06 09:17:55,595 [INFO] --- STAGE 1: SYSTEM PREPARATION ---
+2026-07-06 09:17:55,595 [INFO] Glycoprotein mode enabled: adding GLYCAM force field.
+2026-07-06 09:17:55,964 [INFO] Loading GLYCAM hydrogen definitions: glycam-hydrogens.xml
+2026-07-06 09:17:56,032 [INFO] Detecting covalently bound glycans for GLYCAM preparation...
+2026-07-06 09:17:56,058 [INFO] Detected 33 glycan residues
+2026-07-06 09:17:56,058 [INFO] Detected 33 covalent glycan links
+2026-07-06 09:17:56,058 [INFO] Detected 3 glycan components
+2026-07-06 09:17:56,058 [INFO] Glycan 1 | anchor=ASN:A:64 | glycan_residues=11
+2026-07-06 09:17:56,058 [INFO]   ASN:A:64
+2026-07-06 09:17:56,058 [INFO]   └── 4YB:B:1  (ND2-C1, d=1.383, distance)
+2026-07-06 09:17:56,058 [INFO]       └── 4YB:B:2  (O4-C1, d=1.393, distance)
+2026-07-06 09:17:56,058 [INFO]           └── VMA:B:3  (O4-C1, d=1.414, distance)
+2026-07-06 09:17:56,058 [INFO]               ├── 2MA:B:4  (O3-C1, d=1.289, distance)
+2026-07-06 09:17:56,058 [INFO]               │   └── 2MA:B:6  (O2-C1, d=1.434, distance)
+2026-07-06 09:17:56,058 [INFO]               │       └── 0MA:B:7  (O2-C1, d=1.359, distance)
+2026-07-06 09:17:56,058 [INFO]               └── VMA:B:5  (O6-C1, d=1.417, distance)
+2026-07-06 09:17:56,058 [INFO]                   ├── 2MA:B:10  (O6-C1, d=1.442, distance)
+2026-07-06 09:17:56,058 [INFO]                   │   └── 0MA:B:11  (O2-C1, d=1.388, distance)
+2026-07-06 09:17:56,058 [INFO]                   └── 2MA:B:8  (O3-C1, d=1.416, distance)
+2026-07-06 09:17:56,058 [INFO]                       └── 0MA:B:9  (O2-C1, d=1.362, distance)
+2026-07-06 09:17:56,058 [INFO] Glycan 2 | anchor=ASN:A:103 | glycan_residues=11
+2026-07-06 09:17:56,058 [INFO]   ASN:A:103
+2026-07-06 09:17:56,058 [INFO]   └── 4YB:C:1  (ND2-C1, d=1.357, distance)
+2026-07-06 09:17:56,058 [INFO]       └── 4YB:C:2  (O4-C1, d=1.414, distance)
+2026-07-06 09:17:56,058 [INFO]           └── VMA:C:3  (O4-C1, d=1.4, distance)
+2026-07-06 09:17:56,058 [INFO]               ├── 2MA:C:4  (O3-C1, d=1.283, distance)
+2026-07-06 09:17:56,058 [INFO]               │   └── 2MA:C:6  (O2-C1, d=1.426, distance)
+2026-07-06 09:17:56,058 [INFO]               │       └── 0MA:C:7  (O2-C1, d=1.359, distance)
+2026-07-06 09:17:56,058 [INFO]               └── VMA:C:5  (O6-C1, d=1.398, distance)
+2026-07-06 09:17:56,058 [INFO]                   ├── 2MA:C:10  (O6-C1, d=1.443, distance)
+2026-07-06 09:17:56,058 [INFO]                   │   └── 0MA:C:11  (O2-C1, d=1.367, distance)
+2026-07-06 09:17:56,058 [INFO]                   └── 2MA:C:8  (O3-C1, d=1.398, distance)
+2026-07-06 09:17:56,058 [INFO]                       └── 0MA:C:9  (O2-C1, d=1.197, distance)
+2026-07-06 09:17:56,058 [INFO] Glycan 3 | anchor=ASN:A:165 | glycan_residues=11
+2026-07-06 09:17:56,058 [INFO]   ASN:A:165
+2026-07-06 09:17:56,058 [INFO]   └── 4YB:D:1  (ND2-C1, d=1.383, distance)
+2026-07-06 09:17:56,058 [INFO]       └── 4YB:D:2  (O4-C1, d=1.423, distance)
+2026-07-06 09:17:56,059 [INFO]           └── VMA:D:3  (O4-C1, d=1.403, distance)
+2026-07-06 09:17:56,059 [INFO]               ├── 2MA:D:4  (O3-C1, d=1.258, distance)
+2026-07-06 09:17:56,059 [INFO]               │   └── 2MA:D:6  (O2-C1, d=1.441, distance)
+2026-07-06 09:17:56,059 [INFO]               │       └── 0MA:D:7  (O2-C1, d=1.343, distance)
+2026-07-06 09:17:56,059 [INFO]               └── VMA:D:5  (O6-C1, d=1.402, distance)
+2026-07-06 09:17:56,059 [INFO]                   ├── 2MA:D:10  (O6-C1, d=1.449, distance)
+2026-07-06 09:17:56,059 [INFO]                   │   └── 0MA:D:11  (O2-C1, d=1.356, distance)
+2026-07-06 09:17:56,059 [INFO]                   └── 2MA:D:8  (O3-C1, d=1.401, distance)
+2026-07-06 09:17:56,059 [INFO]                       └── 0MA:D:9  (O2-C1, d=1.051, distance)
+2026-07-06 09:17:56,064 [INFO] Wrote PDBFixer input with 0 unsupported glycan LINK record(s), 0 unsupported/invalid CONECT edge(s), and 0 hydrogen atom record(s) removed: runs1/glycan_prepare/pdbfixer_supported_links.pdb
+2026-07-06 09:17:56,064 [INFO] Preparing protein from runs1/glycan_prepare/pdbfixer_supported_links.pdb...
+2026-07-06 09:17:56,817 [INFO] Skipping PDBFixer hydrogen addition; hydrogens will be added with Modeller/ForceField.
+2026-07-06 09:17:56,817 [INFO] Protein preparation complete.
+2026-07-06 09:17:56,817 [INFO] All detected glycan residues have GLYCAM template assignments.
+2026-07-06 09:17:56,818 [INFO] Renamed glycosylated residue ASN:A:64: ASN -> NLN
+2026-07-06 09:17:56,818 [INFO] Renamed glycosylated residue ASN:A:103: ASN -> NLN
+2026-07-06 09:17:56,818 [INFO] Renamed glycosylated residue ASN:A:165: ASN -> NLN
+2026-07-06 09:17:56,818 [INFO] Renamed 3 glycosylated ASN residues to NLN
+2026-07-06 09:17:56,818 [INFO] GLYCAM atom renaming for NAG:B:1: C7->C2N, O7->O2N, C8->CME
+2026-07-06 09:17:56,818 [INFO] GLYCAM atom renaming for NAG:B:2: C7->C2N, O7->O2N, C8->CME
+2026-07-06 09:17:56,818 [INFO] GLYCAM atom renaming for NAG:C:1: C7->C2N, O7->O2N, C8->CME
+2026-07-06 09:17:56,818 [INFO] GLYCAM atom renaming for NAG:C:2: C7->C2N, O7->O2N, C8->CME
+2026-07-06 09:17:56,818 [INFO] GLYCAM atom renaming for NAG:D:1: C7->C2N, O7->O2N, C8->CME
+2026-07-06 09:17:56,818 [INFO] GLYCAM atom renaming for NAG:D:2: C7->C2N, O7->O2N, C8->CME
+2026-07-06 09:17:56,818 [INFO] Renamed 18 glycan atoms to GLYCAM atom names
+2026-07-06 09:17:56,818 [INFO] Renamed glycan residue NAG:B:1: NAG -> 4YB
+2026-07-06 09:17:56,818 [INFO] Renamed glycan residue NAG:B:2: NAG -> 4YB
+2026-07-06 09:17:56,818 [INFO] Renamed glycan residue MAN:B:3: MAN -> VMA
+2026-07-06 09:17:56,818 [INFO] Renamed glycan residue MAN:B:4: MAN -> 2MA
+2026-07-06 09:17:56,818 [INFO] Renamed glycan residue MAN:B:5: MAN -> VMA
+2026-07-06 09:17:56,818 [INFO] Renamed glycan residue MAN:B:6: MAN -> 2MA
+2026-07-06 09:17:56,818 [INFO] Renamed glycan residue MAN:B:7: MAN -> 0MA
+2026-07-06 09:17:56,818 [INFO] Renamed glycan residue MAN:B:8: MAN -> 2MA
+2026-07-06 09:17:56,818 [INFO] Renamed glycan residue MAN:B:9: MAN -> 0MA
+2026-07-06 09:17:56,818 [INFO] Renamed glycan residue MAN:B:10: MAN -> 2MA
+2026-07-06 09:17:56,818 [INFO] Renamed glycan residue MAN:B:11: MAN -> 0MA
+2026-07-06 09:17:56,818 [INFO] Renamed glycan residue NAG:C:1: NAG -> 4YB
+2026-07-06 09:17:56,818 [INFO] Renamed glycan residue NAG:C:2: NAG -> 4YB
+2026-07-06 09:17:56,818 [INFO] Renamed glycan residue MAN:C:3: MAN -> VMA
+2026-07-06 09:17:56,818 [INFO] Renamed glycan residue MAN:C:4: MAN -> 2MA
+2026-07-06 09:17:56,818 [INFO] Renamed glycan residue MAN:C:5: MAN -> VMA
+2026-07-06 09:17:56,818 [INFO] Renamed glycan residue MAN:C:6: MAN -> 2MA
+2026-07-06 09:17:56,818 [INFO] Renamed glycan residue MAN:C:7: MAN -> 0MA
+2026-07-06 09:17:56,818 [INFO] Renamed glycan residue MAN:C:8: MAN -> 2MA
+2026-07-06 09:17:56,818 [INFO] Renamed glycan residue MAN:C:9: MAN -> 0MA
+2026-07-06 09:17:56,818 [INFO] Renamed glycan residue MAN:C:10: MAN -> 2MA
+2026-07-06 09:17:56,818 [INFO] Renamed glycan residue MAN:C:11: MAN -> 0MA
+2026-07-06 09:17:56,818 [INFO] Renamed glycan residue NAG:D:1: NAG -> 4YB
+2026-07-06 09:17:56,818 [INFO] Renamed glycan residue NAG:D:2: NAG -> 4YB
+2026-07-06 09:17:56,818 [INFO] Renamed glycan residue MAN:D:3: MAN -> VMA
+2026-07-06 09:17:56,818 [INFO] Renamed glycan residue MAN:D:4: MAN -> 2MA
+2026-07-06 09:17:56,818 [INFO] Renamed glycan residue MAN:D:5: MAN -> VMA
+2026-07-06 09:17:56,818 [INFO] Renamed glycan residue MAN:D:6: MAN -> 2MA
+2026-07-06 09:17:56,818 [INFO] Renamed glycan residue MAN:D:7: MAN -> 0MA
+2026-07-06 09:17:56,818 [INFO] Renamed glycan residue MAN:D:8: MAN -> 2MA
+2026-07-06 09:17:56,818 [INFO] Renamed glycan residue MAN:D:9: MAN -> 0MA
+2026-07-06 09:17:56,818 [INFO] Renamed glycan residue MAN:D:10: MAN -> 2MA
+2026-07-06 09:17:56,818 [INFO] Renamed glycan residue MAN:D:11: MAN -> 0MA
+2026-07-06 09:17:56,818 [INFO] Renamed 33 glycan residues to GLYCAM template names
+2026-07-06 09:17:56,819 [INFO] Using explicit glycosylated ASN template NLN:A:64 -> NLN
+2026-07-06 09:17:56,819 [INFO] Using explicit glycosylated ASN template NLN:A:103 -> NLN
+2026-07-06 09:17:56,819 [INFO] Using explicit glycosylated ASN template NLN:A:165 -> NLN
+2026-07-06 09:17:56,819 [INFO] Using 3 explicit glycosylated ASN residue template assignments
+2026-07-06 09:17:56,819 [INFO] GLYCAM topology sanity checks:
+2026-07-06 09:17:56,819 [INFO]   [OK] 4YB:B:1: expected external=['C1', 'O4'] found=['C1', 'O4']
+2026-07-06 09:17:56,819 [INFO]   [OK] 4YB:B:2: expected external=['C1', 'O4'] found=['C1', 'O4']
+2026-07-06 09:17:56,819 [INFO]   [OK] VMA:B:3: expected external=['C1', 'O3', 'O6'] found=['C1', 'O3', 'O6']
+2026-07-06 09:17:56,819 [INFO]   [OK] 2MA:B:4: expected external=['C1', 'O2'] found=['C1', 'O2']
+2026-07-06 09:17:56,820 [INFO]   [OK] VMA:B:5: expected external=['C1', 'O3', 'O6'] found=['C1', 'O3', 'O6']
+2026-07-06 09:17:56,820 [INFO]   [OK] 2MA:B:6: expected external=['C1', 'O2'] found=['C1', 'O2']
+2026-07-06 09:17:56,820 [INFO]   [OK] 0MA:B:7: expected external=['C1'] found=['C1']
+2026-07-06 09:17:56,820 [INFO]   [OK] 2MA:B:8: expected external=['C1', 'O2'] found=['C1', 'O2']
+2026-07-06 09:17:56,820 [INFO]   [OK] 0MA:B:9: expected external=['C1'] found=['C1']
+2026-07-06 09:17:56,820 [INFO]   [OK] 2MA:B:10: expected external=['C1', 'O2'] found=['C1', 'O2']
+2026-07-06 09:17:56,820 [INFO]   [OK] 0MA:B:11: expected external=['C1'] found=['C1']
+2026-07-06 09:17:56,821 [INFO]   [OK] 4YB:C:1: expected external=['C1', 'O4'] found=['C1', 'O4']
+2026-07-06 09:17:56,821 [INFO]   [OK] 4YB:C:2: expected external=['C1', 'O4'] found=['C1', 'O4']
+2026-07-06 09:17:56,821 [INFO]   [OK] VMA:C:3: expected external=['C1', 'O3', 'O6'] found=['C1', 'O3', 'O6']
+2026-07-06 09:17:56,821 [INFO]   [OK] 2MA:C:4: expected external=['C1', 'O2'] found=['C1', 'O2']
+2026-07-06 09:17:56,821 [INFO]   [OK] VMA:C:5: expected external=['C1', 'O3', 'O6'] found=['C1', 'O3', 'O6']
+2026-07-06 09:17:56,821 [INFO]   [OK] 2MA:C:6: expected external=['C1', 'O2'] found=['C1', 'O2']
+2026-07-06 09:17:56,821 [INFO]   [OK] 0MA:C:7: expected external=['C1'] found=['C1']
+2026-07-06 09:17:56,821 [INFO]   [OK] 2MA:C:8: expected external=['C1', 'O2'] found=['C1', 'O2']
+2026-07-06 09:17:56,822 [INFO]   [OK] 0MA:C:9: expected external=['C1'] found=['C1']
+2026-07-06 09:17:56,822 [INFO]   [OK] 2MA:C:10: expected external=['C1', 'O2'] found=['C1', 'O2']
+2026-07-06 09:17:56,822 [INFO]   [OK] 0MA:C:11: expected external=['C1'] found=['C1']
+2026-07-06 09:17:56,822 [INFO]   [OK] 4YB:D:1: expected external=['C1', 'O4'] found=['C1', 'O4']
+2026-07-06 09:17:56,822 [INFO]   [OK] 4YB:D:2: expected external=['C1', 'O4'] found=['C1', 'O4']
+2026-07-06 09:17:56,822 [INFO]   [OK] VMA:D:3: expected external=['C1', 'O3', 'O6'] found=['C1', 'O3', 'O6']
+2026-07-06 09:17:56,822 [INFO]   [OK] 2MA:D:4: expected external=['C1', 'O2'] found=['C1', 'O2']
+2026-07-06 09:17:56,822 [INFO]   [OK] VMA:D:5: expected external=['C1', 'O3', 'O6'] found=['C1', 'O3', 'O6']
+2026-07-06 09:17:56,823 [INFO]   [OK] 2MA:D:6: expected external=['C1', 'O2'] found=['C1', 'O2']
+2026-07-06 09:17:56,823 [INFO]   [OK] 0MA:D:7: expected external=['C1'] found=['C1']
+2026-07-06 09:17:56,823 [INFO]   [OK] 2MA:D:8: expected external=['C1', 'O2'] found=['C1', 'O2']
+2026-07-06 09:17:56,823 [INFO]   [OK] 0MA:D:9: expected external=['C1'] found=['C1']
+2026-07-06 09:17:56,823 [INFO]   [OK] 2MA:D:10: expected external=['C1', 'O2'] found=['C1', 'O2']
+2026-07-06 09:17:56,823 [INFO]   [OK] 0MA:D:11: expected external=['C1'] found=['C1']
+2026-07-06 09:17:56,823 [INFO] GLYCAM sanity checks passed for 33 glycan residues
+2026-07-06 09:17:56,824 [INFO] Metal-aware protonation: no metal atoms detected.
+2026-07-06 09:17:56,824 [INFO] Adding hydrogens using Modeller/ForceField templates in GLYCAM mode...
+2026-07-06 09:17:57,691 [INFO] Atoms after GLYCAM hydrogen addition: 4335
+2026-07-06 09:17:57,704 [INFO] All residues matched by the force field.
+2026-07-06 09:17:57,704 [INFO] Adding solvent and ions...
+2026-07-06 09:18:03,521 [INFO] System size: 106256 atoms.
+2026-07-06 09:18:03,521 [INFO] Creating OpenMM System object...
+2026-07-06 09:18:04,777 [INFO] Saving prepared structure to runs1/prepared.pdb
+2026-07-06 09:18:05,355 [INFO] Saving serialized System to runs1/system.xml
+2026-07-06 09:18:05,710 [INFO] --- PREPARATION STAGE COMPLETE ---
+2026-07-06 09:18:05,718 [INFO] All defined steps completed.

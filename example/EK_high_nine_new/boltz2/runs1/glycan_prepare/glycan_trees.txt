@@ -1,0 +1,42 @@
+Component 1 | anchor=ASN:A:64 | glycan_residues=11
+ASN:A:64
+└── 4YB:B:1  (ND2-C1, d=1.383, distance)
+    └── 4YB:B:2  (O4-C1, d=1.393, distance)
+        └── VMA:B:3  (O4-C1, d=1.414, distance)
+            ├── 2MA:B:4  (O3-C1, d=1.289, distance)
+            │   └── 2MA:B:6  (O2-C1, d=1.434, distance)
+            │       └── 0MA:B:7  (O2-C1, d=1.359, distance)
+            └── VMA:B:5  (O6-C1, d=1.417, distance)
+                ├── 2MA:B:10  (O6-C1, d=1.442, distance)
+                │   └── 0MA:B:11  (O2-C1, d=1.388, distance)
+                └── 2MA:B:8  (O3-C1, d=1.416, distance)
+                    └── 0MA:B:9  (O2-C1, d=1.362, distance)
+
+Component 2 | anchor=ASN:A:103 | glycan_residues=11
+ASN:A:103
+└── 4YB:C:1  (ND2-C1, d=1.357, distance)
+    └── 4YB:C:2  (O4-C1, d=1.414, distance)
+        └── VMA:C:3  (O4-C1, d=1.4, distance)
+            ├── 2MA:C:4  (O3-C1, d=1.283, distance)
+            │   └── 2MA:C:6  (O2-C1, d=1.426, distance)
+            │       └── 0MA:C:7  (O2-C1, d=1.359, distance)
+            └── VMA:C:5  (O6-C1, d=1.398, distance)
+                ├── 2MA:C:10  (O6-C1, d=1.443, distance)
+                │   └── 0MA:C:11  (O2-C1, d=1.367, distance)
+                └── 2MA:C:8  (O3-C1, d=1.398, distance)
+                    └── 0MA:C:9  (O2-C1, d=1.197, distance)
+
+Component 3 | anchor=ASN:A:165 | glycan_residues=11
+ASN:A:165
+└── 4YB:D:1  (ND2-C1, d=1.383, distance)
+    └── 4YB:D:2  (O4-C1, d=1.423, distance)
+        └── VMA:D:3  (O4-C1, d=1.403, distance)
+            ├── 2MA:D:4  (O3-C1, d=1.258, distance)
+            │   └── 2MA:D:6  (O2-C1, d=1.441, distance)
+            │       └── 0MA:D:7  (O2-C1, d=1.343, distance)
+            └── VMA:D:5  (O6-C1, d=1.402, distance)
+                ├── 2MA:D:10  (O6-C1, d=1.449, distance)
+                │   └── 0MA:D:11  (O2-C1, d=1.356, distance)
+                └── 2MA:D:8  (O3-C1, d=1.401, distance)
+                    └── 0MA:D:9  (O2-C1, d=1.051, distance)
+

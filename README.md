@@ -4,8 +4,8 @@
 
 # Sweetspot
 
-Sweetspot prepares glycoprotein prediction inputs from an existing PDB or mmCIF
-structure. It scans protein chains for canonical N-glycosylation sequons
+Sweetspot prepares glycoprotein prediction inputs from an existing PDB, mmCIF,
+or FASTA input. It scans protein chains for canonical N-glycosylation sequons
 (`N-X-S/T`, where `X` is not proline), assigns a glycan chain to each detected
 site, and writes backend-specific input files for structure prediction workflows.
 
@@ -18,7 +18,8 @@ Supported output targets:
 - Boltz2 YAML (`boltz2`)
 - ESMFold / ESM2 protein-only FASTA (`esm`)
 
-The default glycan is `NAG-NAG-MAN`.
+The default glycan is `NAG-NAG-MAN`. High-mannose presets are available with
+`-g man5` and `-g man9`.
 
 ## Repository Layout
 
@@ -64,10 +65,35 @@ Write outputs to a custom directory:
 python sweetspot.py -f example/5m8n.pdb -m boltz2 -o example/sweet_prep
 ```
 
+Run from a single-chain FASTA instead of a structure:
+
+```bash
+python sweetspot.py -f protein.fasta -m boltz2
+```
+
+Run a multi-record FASTA as a complex:
+
+```bash
+python sweetspot.py -f complex.fasta -m boltz2 --complex
+```
+
+Run a homomultimer from a single-record FASTA, for example a homodimer:
+
+```bash
+python sweetspot.py -f protein.fasta -m boltz2 --multimer 2
+```
+
 Use a custom glycan:
 
 ```bash
 python sweetspot.py -f protein.pdb -m all -g NAG-NAG-MAN-MAN
+```
+
+Use a high-mannose preset:
+
+```bash
+python sweetspot.py -f protein.pdb -m boltz2 -g man5
+python sweetspot.py -f protein.pdb -m boltz2 -g man9
 ```
 
 Use a branched glycan layout:
