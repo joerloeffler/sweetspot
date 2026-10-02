@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "name": "example_glycoprotein_trimer_man5",
+  "backend": {"name": "boltz2", "executable": "boltz"},
+  "proteins": [
+    {
+      "id": "trimer",
+      "fasta": "inputs/trimer.fasta",
+      "copies": 3,
+      "glycosylation": {
+        "enabled": true,
+        "sites": "auto",
+        "glycan": "man5",
+        "tree": "branched"
+      }
+    }
+  ],
+  "align": true,
+  "prediction": {"sampling_steps": 200, "diffusion_samples": 5, "seed": 0},
+  "output": {"directory": "results", "format": "mmcif"}
+}

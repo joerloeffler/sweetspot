@@ -1,0 +1,5 @@
+{
+  "backend": "boltz2",
+  "proteins": [{"fasta": "inputs/monomer.fasta"}],
+  "align": true
+}

@@ -1,0 +1,57 @@
+{
+  "slurm": {
+    "job_name": "sweetspot",
+    "cpus_per_task": 16,
+    "nodes": 1,
+    "memory": "16gb",
+    "partition": "low",
+    "gres": "shard:60",
+    "nodelist": "ai",
+    "output": "slurm-%j.out"
+  },
+  "environment": {
+    "shell": "/bin/bash",
+    "setup": [
+      "eval \"$(/z/linux/bin/micromamba shell hook -s posix)\"",
+      "micromamba activate \"/z/bio/biotools/miniconda/envs/boltz2/\""
+    ]
+  },
+  "workflow_defaults": {
+    "msa": {
+      "command": "/z/bio/biotools/miniconda/envs/colabfold_beta2/bin/colabfold_search",
+      "mmseqs": "/z/bio/biotools/mmseqs",
+      "database": "/var/tmp/databases/colabfold/uniref30_2103",
+      "database_directory": "/var/tmp/databases/colabfold/",
+      "tmp_directory": "/var/tmp/boltz_tmp",
+      "threads": 16,
+      "use_environmental_database": false
+    }
+  },
+  "backends": {
+    "boltz2": {
+      "slurm": {"job_name": "boltz2"}
+    },
+    "esmfold2": {
+      "workflow_defaults": {
+        "msa": {"tmp_directory": "/var/tmp/esmfold2/msa", "max_sequences": 256},
+        "prediction": {"num_loops": 20, "sampling_steps": 100, "max_parallel_samples": 1}
+      },
+      "slurm": {"job_name": "esmfold2"},
+      "environment": {
+        "python": "/z/bio/biotools/esm_biohub/scripts/run_python.sh",
+        "variables": {
+          "HF_HOME": "/var/tmp/hf_cache",
+          "HF_HUB_CACHE": "/var/tmp/hf_cache",
+          "HUGGINGFACE_HUB_CACHE": "/var/tmp/hf_cache",
+          "TRANSFORMERS_CACHE": "/var/tmp/hf_cache",
+          "HF_HUB_OFFLINE": "1",
+          "TRANSFORMERS_OFFLINE": "1",
+          "TORCH_HOME": "/var/tmp/checkpoints",
+          "PYTHONNOUSERSITE": "1",
+          "PYTHONUNBUFFERED": "1"
+        },
+        "setup": ["mkdir -p /var/tmp/hf_cache /var/tmp/checkpoints /var/tmp/esmfold2/msa"]
+      }
+    }
+  }
+}

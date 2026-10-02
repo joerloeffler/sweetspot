@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "name": "example_ncaa_explicit_complex",
+  "backend": {"name": "boltz2", "executable": "boltz"},
+  "proteins": [
+    {
+      "id": "ncaa_complex",
+      "fasta": "inputs/ncaa_complex.fasta",
+      "chains": ["A", "B"],
+      "noncanonical_amino_acids": {
+        "mode": "explicit",
+        "base_residue": "A",
+        "items": [
+          {"chain": "A", "position": 5, "ccd": "AIB"},
+          {"chain": "A", "position": 9, "ccd": "NLE"},
+          {"chain": "B", "position": 4, "ccd": "ORN"},
+          {"chain": "B", "position": 8, "ccd": "SAR"}
+        ]
+      },
+      "glycosylation": {"enabled": false}
+    }
+  ],
+  "msa": {"source": "none"},
+  "prediction": {"sampling_steps": 200, "diffusion_samples": 5, "seed": 0},
+  "output": {"directory": "results", "format": "mmcif"}
+}

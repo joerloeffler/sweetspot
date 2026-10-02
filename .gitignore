@@ -1,3 +1,14 @@
 dev/
 __pycache__/
 *.pyc
+.DS_Store
+.venv/
+.pytest_cache/
+.mypy_cache/
+*.egg-info/
+slurm-*.out
+results/
+msas/
+*_glyco_inputs/
+boltz2output/
+example/*_prep/

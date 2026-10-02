@@ -1,7 +1,0 @@
-site_id	glycan_id	chain	asn_resid	sequon	x_resid	st_resid	asn_chain_index
-site1	B	A	96	NRT	97	98	72
-site2	C	A	104	NFS	105	106	80
-site3	D	A	181	NIS	182	183	157
-site4	E	A	304	NST	305	306	280
-site5	F	A	350	NST	351	352	326
-site6	G	A	385	NGT	386	387	361

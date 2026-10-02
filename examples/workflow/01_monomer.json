@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "name": "example_monomer",
+  "backend": {"name": "esmfold2", "model": "fast"},
+  "proteins": [
+    {
+      "id": "monomer",
+      "fasta": "inputs/monomer.fasta",
+      "chains": ["A"],
+      "glycosylation": {"enabled": false}
+    }
+  ],
+  "msa": {"source": "none"},
+  "prediction": {"num_loops": 3, "sampling_steps": 50, "diffusion_samples": 1, "seed": 0},
+  "output": {"directory": "results", "format": "mmcif"}
+}

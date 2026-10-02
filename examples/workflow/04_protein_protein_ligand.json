@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "name": "example_protein_protein_ligand",
+  "backend": {"name": "alphafold3", "executable": "run_alphafold.py"},
+  "proteins": [
+    {
+      "id": "receptor",
+      "fasta": "inputs/receptor.fasta",
+      "chains": ["A"],
+      "glycosylation": {"enabled": false}
+    },
+    {
+      "id": "binder",
+      "fasta": "inputs/binder.fasta",
+      "chains": ["B"],
+      "glycosylation": {"enabled": false}
+    }
+  ],
+  "ligands": [
+    {"name": "heme", "ccd": "HEM", "count": 1, "chains": ["L"]}
+  ],
+  "msa": {"source": "none"},
+  "prediction": {"diffusion_samples": 1, "seed": 1},
+  "output": {"directory": "results", "format": "mmcif"}
+}

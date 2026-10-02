@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "name": "example_protein_protein",
+  "backend": {"name": "boltz2", "executable": "boltz"},
+  "proteins": [
+    {
+      "id": "protein_complex",
+      "fasta": "inputs/protein_complex.fasta",
+      "chains": ["A", "B"],
+      "glycosylation": {"enabled": false}
+    }
+  ],
+  "msa": {"source": "none"},
+  "prediction": {"sampling_steps": 200, "diffusion_samples": 1, "seed": 0},
+  "output": {"directory": "results", "format": "mmcif"}
+}

@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sweetspot.local/schemas/settings.schema.json",
+  "title": "Sweetspot workflow settings",
+  "type": "object",
+  "required": ["backend", "proteins"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "name": {"type": "string", "minLength": 1},
+    "backend": {
+      "oneOf": [
+        {"enum": ["boltz2", "alphafold3", "esmfold2"]},
+        {
+          "type": "object",
+          "required": ["name"],
+          "properties": {
+            "name": {"enum": ["boltz2", "alphafold3", "esmfold2"]},
+            "model": {"type": "string"},
+            "executable": {"type": "string"}
+          },
+          "additionalProperties": true
+        }
+      ]
+    },
+    "proteins": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {"type": "string"},
+          "fasta": {"type": "string"},
+          "sequence": {"type": "string"},
+          "chains": {"type": "array", "items": {"type": "string"}, "minItems": 1},
+          "copies": {"type": "integer", "minimum": 1},
+          "modifications": {"type": "array"},
+          "noncanonical_amino_acids": {"type": "object"},
+          "glycosylation": {"type": "object"}
+        },
+        "oneOf": [{"required": ["fasta"]}, {"required": ["sequence"]}],
+        "additionalProperties": false
+      }
+    },
+    "ligands": {"oneOf": [{"type": "array"}, {"type": "object"}]},
+    "ions": {"type": "object"},
+    "align": {
+      "description": "Concise MSA control. true uses the configured/default source; false disables alignment.",
+      "oneOf": [
+        {"type": "boolean"},
+        {"enum": ["local", "server", "none"]}
+      ]
+    },
+    "msa": {
+      "oneOf": [
+        {"enum": ["local", "server", "none"]},
+        {"type": "object"}
+      ]
+    },
+    "prediction": {
+      "type": "object",
+      "properties": {
+        "diffusion_samples": {"type": "integer", "minimum": 1},
+        "max_parallel_samples": {"type": "integer", "minimum": 1},
+        "seed": {"type": "integer"},
+        "num_loops": {"type": "integer", "minimum": 1},
+        "recycling_steps": {"type": "integer", "minimum": 1},
+        "sampling_steps": {"type": "integer", "minimum": 1}
+      },
+      "additionalProperties": true
+    },
+    "output": {"type": "object"}
+  },
+  "additionalProperties": false
+}

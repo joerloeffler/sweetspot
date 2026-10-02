@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "name": "example_glycoprotein_complex_man9",
+  "backend": {"name": "boltz2", "executable": "boltz"},
+  "proteins": [
+    {
+      "id": "glycoprotein_complex",
+      "fasta": "inputs/glycoprotein_complex.fasta",
+      "chains": ["A", "B"],
+      "glycosylation": {
+        "enabled": true,
+        "sites": "auto",
+        "glycan": "man9",
+        "tree": "branched"
+      }
+    }
+  ],
+  "msa": {"source": "none"},
+  "prediction": {"sampling_steps": 200, "diffusion_samples": 5, "seed": 0},
+  "output": {"directory": "results", "format": "mmcif"}
+}

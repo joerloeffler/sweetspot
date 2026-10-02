@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "name": "example_ncaa_automatic_x",
+  "backend": {"name": "boltz2", "executable": "boltz"},
+  "proteins": [
+    {
+      "id": "ncaa_peptide",
+      "fasta": "inputs/ncaa_auto.fasta",
+      "chains": ["A"],
+      "noncanonical_amino_acids": {
+        "mode": "auto",
+        "ccds": ["AIB", "NLE"],
+        "base_residue": "A"
+      },
+      "glycosylation": {"enabled": false}
+    }
+  ],
+  "msa": {"source": "none"},
+  "prediction": {"sampling_steps": 200, "diffusion_samples": 5, "seed": 0},
+  "output": {"directory": "results", "format": "mmcif"}
+}

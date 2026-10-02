@@ -1,7 +1,0 @@
-MSA plan
-========
-
-Detected heteromer with 2 chain(s) and 2 unique protein sequence(s).
-
-boltz2output/msas/A.a3m: chains A
-boltz2output/msas/C.a3m: chains C

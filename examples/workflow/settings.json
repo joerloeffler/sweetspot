@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "name": "glycoprotein_trimer",
+  "backend": {"name": "boltz2", "executable": "boltz"},
+  "proteins": [
+    {
+      "id": "example_trimer",
+      "fasta": "example_sequence.fasta",
+      "copies": 3,
+      "glycosylation": {
+        "enabled": true,
+        "sites": "auto",
+        "glycan": "NAG-NAG-MAN",
+        "tree": "linear"
+      }
+    }
+  ],
+  "ligands": [],
+  "ions": {
+    "mode": "explicit",
+    "species": [{"ccd": "CA", "count": 2, "role": "structural"}]
+  },
+  "align": true,
+  "prediction": {"diffusion_samples": 5, "sampling_steps": 200, "seed": 0},
+  "output": {"directory": "results", "format": "mmcif"}
+}

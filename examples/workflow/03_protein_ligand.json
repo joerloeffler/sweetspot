@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "name": "example_protein_ligand",
+  "backend": {"name": "boltz2", "executable": "boltz"},
+  "proteins": [
+    {
+      "id": "receptor",
+      "fasta": "inputs/receptor.fasta",
+      "chains": ["A"],
+      "glycosylation": {"enabled": false}
+    }
+  ],
+  "ligands": {"smiles_file": "inputs/ligands.smi"},
+  "msa": {"source": "none"},
+  "prediction": {"sampling_steps": 200, "diffusion_samples": 5, "seed": 0},
+  "output": {"directory": "results", "format": "mmcif"}
+}

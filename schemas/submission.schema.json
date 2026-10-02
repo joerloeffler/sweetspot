@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sweetspot.local/schemas/submission.schema.json",
+  "title": "Sweetspot Slurm submission profile",
+  "type": "object",
+  "required": ["slurm"],
+  "properties": {
+    "slurm": {"$ref": "#/$defs/slurm"},
+    "environment": {"$ref": "#/$defs/environment"},
+    "workflow_defaults": {"type": "object"},
+    "backends": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "slurm": {"$ref": "#/$defs/slurm"},
+          "environment": {"$ref": "#/$defs/environment"},
+          "workflow_defaults": {"type": "object"}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "$defs": {
+    "slurm": {
+      "type": "object",
+      "properties": {
+        "job_name": {"type": "string"},
+        "cpus_per_task": {"type": "integer", "minimum": 1},
+        "nodes": {"type": "integer", "minimum": 1},
+        "memory": {"type": "string"},
+        "partition": {"type": "string"},
+        "gres": {"type": ["string", "null"]},
+        "nodelist": {"type": ["string", "null"]},
+        "exclude": {"type": ["string", "null"]},
+        "time": {"type": ["string", "null"]},
+        "output": {"type": ["string", "null"]},
+        "account": {"type": ["string", "null"]},
+        "qos": {"type": ["string", "null"]}
+      },
+      "additionalProperties": false
+    },
+    "environment": {
+      "type": "object",
+      "properties": {
+        "shell": {"type": "string"},
+        "python": {"type": "string"},
+        "variables": {"type": "object", "additionalProperties": {"type": ["string", "number", "boolean"]}},
+        "setup": {"type": "array", "items": {"type": "string"}}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}
